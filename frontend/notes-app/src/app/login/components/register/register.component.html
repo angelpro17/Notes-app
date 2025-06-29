@@ -1,0 +1,138 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <!-- Header -->
+        <div class="auth-header">
+            <div class="logo-container">
+                <div class="logo-circle">
+                    <img src="/Logo.png" alt="Notes App Logo" class="logo-image" />
+                </div>
+                <h1 class="app-title">Bienvenido(a)</h1>
+            </div>
+            <p class="welcome-text">Crea tu cuenta gratuita</p>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div *ngIf="errorMessage" class="error-alert" (click)="clearError()">
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <span class="error-text">{{ errorMessage }}</span>
+            <mat-icon class="close-icon">close</mat-icon>
+        </div>
+
+        <!-- Formulario -->
+        <form class="auth-form" (ngSubmit)="onSubmit()" #registerForm="ngForm">
+            <!-- Nombres y Apellidos en una fila -->
+            <div class="form-row">
+                <div class="form-group half-width">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Nombres</mat-label>
+                        <mat-icon matPrefix>person</mat-icon>
+                        <input
+                                matInput
+                                type="text"
+                                name="firstName"
+                                [(ngModel)]="firstName"
+                                placeholder="Tu nombre"
+                                required
+                                minlength="2"
+                        />
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group half-width">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Apellidos</mat-label>
+                        <mat-icon matPrefix>person_outline</mat-icon>
+                        <input
+                                matInput
+                                type="text"
+                                name="lastName"
+                                [(ngModel)]="lastName"
+                                placeholder="Tus apellidos"
+                                required
+                                minlength="2"
+                        />
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Correo electrónico</mat-label>
+                    <mat-icon matPrefix>email</mat-icon>
+                    <input
+                            matInput
+                            type="email"
+                            name="username"
+                            [(ngModel)]="username"
+                            placeholder="ejemplo@correo.com"
+                            required
+                            email
+                    />
+                </mat-form-field>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Contraseña</mat-label>
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <input
+                            matInput
+                            [type]="showPassword ? 'text' : 'password'"
+                            name="password"
+                            [(ngModel)]="password"
+                            placeholder="Mínimo 6 caracteres"
+                            required
+                            minlength="6"
+                    />
+                    <button
+                            mat-icon-button
+                            matSuffix
+                            (click)="togglePasswordVisibility()"
+                            type="button"
+                    >
+                        <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+
+            <!-- Terms checkbox -->
+            <div class="form-group">
+                <mat-checkbox [(ngModel)]="termsAccepted" name="terms" required class="terms-checkbox">
+                    Acepto los
+                    <a href="#" class="link-text">Términos y Condiciones</a>
+                    y la
+                    <a href="#" class="link-text">Política de Privacidad</a>
+                </mat-checkbox>
+            </div>
+
+            <!-- Submit button -->
+            <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    [disabled]="!registerForm.form.valid || isLoading"
+                    class="submit-btn"
+            >
+                <mat-spinner *ngIf="isLoading" diameter="20" class="btn-spinner"></mat-spinner>
+                <mat-icon *ngIf="!isLoading">person_add</mat-icon>
+                <span>{{ isLoading ? 'Creando cuenta...' : 'Crear Cuenta' }}</span>
+            </button>
+        </form>
+
+        <!-- Login link -->
+        <div class="auth-footer">
+            <p>¿Ya tienes una cuenta?</p>
+            <button
+                    mat-button
+                    color="primary"
+                    (click)="navigateToLogin()"
+                    [disabled]="isLoading"
+                    class="link-btn"
+            >
+                Iniciar sesión
+            </button>
+        </div>
+    </div>
+</div>

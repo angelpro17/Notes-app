@@ -1,0 +1,118 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <!-- Header con logo y título -->
+        <div class="auth-header">
+            <div class="logo-container">
+                <div class="logo-circle">
+                    <img src="/Logo.png" alt="Notes App Logo" class="logo-image" />
+                </div>
+                <h1 class="app-title">Bienvenido(a)</h1>
+            </div>
+            <p class="welcome-text">Inicia sesión en tu cuenta</p>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div *ngIf="errorMessage" class="error-alert" (click)="clearError()">
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <span class="error-text">{{ errorMessage }}</span>
+            <mat-icon class="close-icon">close</mat-icon>
+        </div>
+
+        <!-- Formulario -->
+        <form class="auth-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+            <!-- Email -->
+            <div class="form-group">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Correo electrónico</mat-label>
+                    <mat-icon matPrefix>email</mat-icon>
+                    <input
+                            matInput
+                            type="email"
+                            name="email"
+                            [(ngModel)]="username"
+                            placeholder="ejemplo@correo.com"
+                            [disabled]="isLoading"
+                            required
+                            email
+                    />
+                </mat-form-field>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Contraseña</mat-label>
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <input
+                            matInput
+                            [type]="showPassword ? 'text' : 'password'"
+                            name="password"
+                            [(ngModel)]="password"
+                            placeholder="Ingresa tu contraseña"
+                            [disabled]="isLoading"
+                            required
+                            minlength="6"
+                    />
+                    <button
+                            mat-icon-button
+                            matSuffix
+                            (click)="togglePasswordVisibility()"
+                            type="button"
+                            [disabled]="isLoading"
+                    >
+                        <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+
+            <!-- Forgot password -->
+            <div class="forgot-password">
+                <a href="#" class="link-text">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <!-- Submit button -->
+            <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    [disabled]="!loginForm.form.valid || isLoading"
+                    class="submit-btn"
+            >
+                <mat-spinner *ngIf="isLoading" diameter="20" class="btn-spinner"></mat-spinner>
+                <mat-icon *ngIf="!isLoading">login</mat-icon>
+                <span>{{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}</span>
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+            <span>o continúa con</span>
+        </div>
+
+        <!-- Social login -->
+        <div class="social-login">
+            <button mat-stroked-button class="social-btn" [disabled]="isLoading">
+                <mat-icon>g_translate</mat-icon>
+                Google
+            </button>
+            <button mat-stroked-button class="social-btn" [disabled]="isLoading">
+                <mat-icon>facebook</mat-icon>
+                Facebook
+            </button>
+        </div>
+
+        <!-- Register link -->
+        <div class="auth-footer">
+            <p>¿No tienes una cuenta?</p>
+            <button
+                    mat-button
+                    color="primary"
+                    (click)="navigateToRegister()"
+                    [disabled]="isLoading"
+                    class="link-btn"
+            >
+                Crear cuenta
+            </button>
+        </div>
+    </div>
+</div>

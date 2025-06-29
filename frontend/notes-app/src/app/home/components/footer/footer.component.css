@@ -1,0 +1,39 @@
+.footer {
+  width: 100%;
+  background: #18191c;
+  border-top: 1px solid #28292e;
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  color: #8c8c8c;
+  font-size: 0.875rem;
+}
+
+.footer-content .copyright {
+  font-weight: 500;
+}
+
+.footer-content .divider {
+  opacity: 0.6;
+}
+
+.footer-content .powered-by {
+  opacity: 0.8;
+}
+
+@media (max-width: 480px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .footer-content .divider {
+    display: none;
+  }
+}

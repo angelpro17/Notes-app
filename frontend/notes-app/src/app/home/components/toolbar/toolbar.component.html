@@ -1,0 +1,53 @@
+<mat-toolbar class="main-toolbar" color="primary">
+  <!-- Logo y nombre de la app -->
+  <div class="app-brand">
+    <div class="logo-container">
+      <mat-icon class="app-logo">note_alt</mat-icon>
+    </div>
+    <span class="app-name">Notes App</span>
+  </div>
+
+  <span class="toolbar-spacer"></span>
+
+  <!-- Filtro de categorías -->
+  <mat-form-field
+    *ngIf="categories.length"
+    appearance="outline"
+    class="category-filter">
+    <mat-label>
+      <mat-icon>filter_list</mat-icon>
+      Categoría
+    </mat-label>
+    <mat-select
+      [value]="selectedCategoryId"
+      (selectionChange)="onCategoryChange($event.value)">
+      <mat-option [value]="null">
+        <mat-icon>all_inclusive</mat-icon>
+        Todas
+      </mat-option>
+      <mat-option *ngFor="let cat of categories" [value]="cat.id">
+        <div class="category-option">
+          <span
+            class="category-dot"
+            [style.background-color]="cat.color || '#3f51b5'">
+          </span>
+          {{ cat.name }}
+        </div>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Bienvenida y logout -->
+  <div class="user-section">
+    <span class="user-name">
+      Bienvenido {{ currentUser?.username || 'Usuario' }}
+    </span>
+    <button
+      mat-icon-button
+      class="logout-button"
+      (click)="logout()"
+      matTooltip="Cerrar Sesión">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>

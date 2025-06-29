@@ -1,0 +1,76 @@
+<mat-card class="dialog-card">
+  <mat-card-header>
+    <mat-card-title>{{ data.isEdit ? 'Editar Nota' : 'Nueva Nota' }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form #noteForm="ngForm" class="note-form">
+      <!-- Título -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Título</mat-label>
+        <input
+          matInput
+          [(ngModel)]="noteData.title"
+          name="title"
+          placeholder="Ingresa el título de la nota"
+          required
+          maxlength="100">
+        <mat-hint>{{ noteData.title?.length || 0 }}/100</mat-hint>
+      </mat-form-field>
+
+      <!-- Contenido -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Contenido</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="noteData.content"
+          name="content"
+          placeholder="Escribe el contenido de tu nota..."
+          rows="6"
+          required
+          maxlength="1000">
+            </textarea>
+        <mat-hint>{{ noteData.content?.length || 0 }}/1000</mat-hint>
+      </mat-form-field>
+
+      <!-- Categorías -->
+      <mat-form-field appearance="fill" class="full-width" *ngIf="data.categories.length > 0">
+        <mat-label>Categorías</mat-label>
+        <mat-select
+          [(ngModel)]="selectedCategoryIds"
+          name="categories"
+          multiple>
+          <mat-option *ngFor="let category of data.categories" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+        </mat-select>
+        <mat-hint>Selecciona las categorías para esta nota</mat-hint>
+      </mat-form-field>
+
+      <!-- Categorías seleccionadas -->
+      <div class="selected-categories" *ngIf="selectedCategoryIds.length > 0">
+        <h4>Categorías seleccionadas:</h4>
+        <mat-chip-set>
+          <mat-chip
+            *ngFor="let categoryId of selectedCategoryIds"
+            (removed)="removeCategory(categoryId)">
+            {{ getCategoryName(categoryId) }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSave()"
+      [disabled]="!noteForm.form.valid || isLoading">
+      <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+      {{ data.isEdit ? 'Actualizar' : 'Crear' }}
+    </button>
+  </mat-card-actions>
+</mat-card>

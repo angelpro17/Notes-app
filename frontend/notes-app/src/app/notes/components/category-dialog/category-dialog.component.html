@@ -1,0 +1,56 @@
+<mat-card class="dialog-card">
+  <mat-card-header>
+    <mat-card-title>{{ data.isEdit ? 'Editar Categoría' : 'Nueva Categoría' }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form #categoryForm="ngForm" class="category-form">
+      <!-- Nombre -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Nombre de la categoría</mat-label>
+        <input
+          matInput
+          [(ngModel)]="categoryData.name"
+          name="name"
+          placeholder="Ej: Trabajo, Personal, Estudios"
+          required
+          maxlength="50">
+        <mat-hint>{{ categoryData.name?.length || 0 }}/50</mat-hint>
+      </mat-form-field>
+
+      <!-- Color (opcional) -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Color (opcional)</mat-label>
+        <input
+          matInput
+          [(ngModel)]="categoryData.color"
+          name="color"
+          type="color"
+          placeholder="#3f51b5">
+        <mat-hint>Selecciona un color para identificar la categoría</mat-hint>
+      </mat-form-field>
+
+      <!-- Preview -->
+      <div class="category-preview" *ngIf="categoryData.name">
+        <h4>Vista previa:</h4>
+        <div
+          class="preview-chip"
+          [style.background-color]="categoryData.color || '#3f51b5'">
+          {{ categoryData.name }}
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSave()"
+      [disabled]="!categoryForm.form.valid || isLoading">
+      <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+      {{ data.isEdit ? 'Actualizar' : 'Crear' }}
+    </button>
+  </mat-card-actions>
+</mat-card>

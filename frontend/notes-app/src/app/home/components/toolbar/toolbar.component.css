@@ -1,0 +1,107 @@
+/* Variables del toolbar */
+:host {
+  display: block;
+}
+
+/* Toolbar base */
+.main-toolbar {
+  height: 80px;       /* o var(--toolbar-height) */
+  background: linear-gradient(135deg, #667eea, #5a67d8);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Logo y nombre */
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-container {
+  width: 45px;
+  height: 45px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-logo {
+  font-size: 24px;
+  color: white;
+}
+
+.app-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Empuja todo a la derecha */
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+/* Filtro categorías */
+.category-filter {
+  min-width: 200px;
+  margin-right: 2rem;
+}
+
+.category-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Sección usuario + logout */
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 35px;
+  height: 35px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatar mat-icon {
+  font-size: 20px;
+  color: white;
+}
+
+.user-name {
+  font-weight: 500;
+  color: white;
+}
+
+.logout-button {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.05);
+}

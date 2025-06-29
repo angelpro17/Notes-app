@@ -1,0 +1,41 @@
+.dialog-card {
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.category-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 350px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.category-preview {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.category-preview h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.preview-chip {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 16px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+mat-card-actions {
+  padding: 16px 0;
+}

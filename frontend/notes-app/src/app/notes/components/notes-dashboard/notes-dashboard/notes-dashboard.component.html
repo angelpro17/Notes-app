@@ -1,0 +1,275 @@
+<div class="dashboard-wrapper">
+  <!-- Toolbar principal -->
+  <app-toolbar></app-toolbar>
+
+  <!-- Botones de acción flotantes -->
+  <div class="floating-actions">
+    <button mat-fab color="accent" class="fab-secondary" (click)="openCategoryDialog()"
+            matTooltip="Nueva Categoría" matTooltipPosition="left">
+      <mat-icon>label</mat-icon>
+    </button>
+
+    <button mat-fab color="primary" class="fab-primary" (click)="openNoteDialog()"
+            matTooltip="Nueva Nota" matTooltipPosition="left">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <!-- Loading con animación mejorada -->
+  <div class="loading-section" *ngIf="isLoading">
+    <div class="loading-content">
+      <div class="loading-animation">
+        <mat-spinner diameter="60" strokeWidth="4"></mat-spinner>
+        <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+      <h3>Cargando tus notas...</h3>
+      <p>Preparando tu espacio de trabajo</p>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <main class="main-content" *ngIf="!isLoading">
+
+    <!-- Estadísticas rápidas -->
+    <section class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-card active">
+          <div class="stat-icon">
+            <mat-icon>note</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ activeNotes.length }}</span>
+            <span class="stat-label">Notas Activas</span>
+          </div>
+        </div>
+
+        <div class="stat-card archived">
+          <div class="stat-icon">
+            <mat-icon>archive</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ archivedNotes.length }}</span>
+            <span class="stat-label">Archivadas</span>
+          </div>
+        </div>
+
+        <div class="stat-card categories">
+          <div class="stat-icon">
+            <mat-icon>label</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">{{ categories.length }}</span>
+            <span class="stat-label">Categorías</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs mejorados -->
+    <mat-tab-group class="modern-tabs" animationDuration="300ms">
+
+      <!-- Tab de Notas Activas -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="tab-label">
+            <mat-icon>note</mat-icon>
+            <span>Notas Activas</span>
+            <div class="tab-badge" *ngIf="activeNotes.length > 0">{{ activeNotes.length }}</div>
+          </div>
+        </ng-template>
+
+        <div class="tab-content">
+          <!-- Estado vacío mejorado -->
+          <div class="empty-state modern" *ngIf="activeNotes.length === 0">
+            <div class="empty-illustration">
+              <div class="floating-notes">
+                <mat-icon class="note-icon note-1">note</mat-icon>
+                <mat-icon class="note-icon note-2">note_add</mat-icon>
+                <mat-icon class="note-icon note-3">edit_note</mat-icon>
+              </div>
+            </div>
+            <div class="empty-content">
+              <h2>¡Comienza tu viaje creativo!</h2>
+              <p>Crea tu primera nota y organiza tus ideas de manera brillante</p>
+              <button mat-raised-button color="primary" class="cta-button" (click)="openNoteDialog()">
+                <mat-icon>add_circle</mat-icon>
+                Crear mi primera nota
+              </button>
+            </div>
+          </div>
+
+          <!-- Grid de notas mejorado -->
+          <div class="notes-masonry" *ngIf="activeNotes.length > 0">
+            <div *ngFor="let note of activeNotes; trackBy: trackByNoteId"
+                 class="note-card modern"
+                 [class.has-categories]="note.categories && note.categories.length > 0">
+
+              <div class="note-header">
+                <h3 class="note-title">{{ note.title }}</h3>
+                <div class="note-actions">
+                  <button mat-icon-button class="action-btn-small" (click)="editNote(note)"
+                          matTooltip="Editar">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button class="action-btn-small" (click)="archiveNote(note)"
+                          matTooltip="Archivar">
+                    <mat-icon>archive</mat-icon>
+                  </button>
+                  <button mat-icon-button class="action-btn-small danger" (click)="deleteNote(note)"
+                          matTooltip="Eliminar">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+              <div class="note-content">
+                <p>{{ note.content }}</p>
+              </div>
+
+              <!-- Categorías visuales -->
+              <div class="note-categories" *ngIf="note.categories && note.categories.length > 0">
+                <div class="category-chips">
+                  <span *ngFor="let category of note.categories"
+                        class="category-chip"
+                        [style.background-color]="category.color || '#3f51b5'">
+                    {{ category.name }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="note-footer">
+                <div class="note-date">
+                  <mat-icon>schedule</mat-icon>
+                  <span>{{ note.createdAt | date:'MMM d, y' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Tab de Notas Archivadas -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="tab-label">
+            <mat-icon>archive</mat-icon>
+            <span>Archivadas</span>
+            <div class="tab-badge archived" *ngIf="archivedNotes.length > 0">{{ archivedNotes.length }}</div>
+          </div>
+        </ng-template>
+
+        <div class="tab-content">
+          <!-- Estado vacío para archivadas -->
+          <div class="empty-state archived" *ngIf="archivedNotes.length === 0">
+            <div class="empty-illustration">
+              <mat-icon class="archive-icon">archive</mat-icon>
+            </div>
+            <div class="empty-content">
+              <h2>Archivo limpio</h2>
+              <p>Las notas que archives aparecerán aquí para mantener tu espacio organizado</p>
+            </div>
+          </div>
+
+          <!-- Grid de notas archivadas -->
+          <div class="notes-masonry archived" *ngIf="archivedNotes.length > 0">
+            <div *ngFor="let note of archivedNotes; trackBy: trackByNoteId"
+                 class="note-card archived">
+
+              <div class="archived-badge">
+                <mat-icon>archive</mat-icon>
+                <span>Archivada</span>
+              </div>
+
+              <div class="note-header">
+                <h3 class="note-title">{{ note.title }}</h3>
+                <div class="note-actions">
+                  <button mat-icon-button class="action-btn-small" (click)="unarchiveNote(note)"
+                          matTooltip="Desarchivar">
+                    <mat-icon>unarchive</mat-icon>
+                  </button>
+                  <button mat-icon-button class="action-btn-small danger" (click)="deleteNote(note)"
+                          matTooltip="Eliminar">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+              <div class="note-content">
+                <p>{{ note.content }}</p>
+              </div>
+
+              <div class="note-footer">
+                <div class="note-date">
+                  <mat-icon>schedule</mat-icon>
+                  <span>{{ note.updatedAt | date:'MMM d, y' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Tab de Categorías -->
+      <mat-tab *ngIf="categories.length > 0">
+        <ng-template mat-tab-label>
+          <div class="tab-label">
+            <mat-icon>palette</mat-icon>
+            <span>Categorías</span>
+            <div class="tab-badge categories">{{ categories.length }}</div>
+          </div>
+        </ng-template>
+
+        <div class="tab-content">
+          <div class="categories-grid">
+            <div *ngFor="let category of categories; trackBy: trackByCategoryId"
+                 class="category-card modern">
+
+              <div class="category-visual" [style.background-color]="category.color || '#3f51b5'">
+                <mat-icon>label</mat-icon>
+              </div>
+
+              <div class="category-info">
+                <h3>{{ category.name }}</h3>
+                <p>{{ getNotesByCategory(category.id!).length }} notas</p>
+              </div>
+
+              <div class="category-actions">
+                <button mat-icon-button (click)="editCategory(category)" matTooltip="Editar">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button class="danger" (click)="deleteCategory(category)" matTooltip="Eliminar">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </main>
+
+  <!-- Diálogos mejorados -->
+  <div class="dialog-overlay modern" *ngIf="showNoteDialog" (click)="onNoteCancel()">
+    <div class="dialog-container" (click)="$event.stopPropagation()">
+      <app-note-dialog
+        [data]="noteDialogData"
+        (save)="onNoteSave($event)"
+        (cancel)="onNoteCancel()">
+      </app-note-dialog>
+    </div>
+  </div>
+
+  <div class="dialog-overlay modern" *ngIf="showCategoryDialog" (click)="onCategoryCancel()">
+    <div class="dialog-container" (click)="$event.stopPropagation()">
+      <app-category-dialog
+        [data]="categoryDialogData"
+        (save)="onCategorySave($event)"
+        (cancel)="onCategoryCancel()">
+      </app-category-dialog>
+    </div>
+  </div>
+</div>
